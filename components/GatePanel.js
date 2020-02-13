@@ -1,9 +1,8 @@
-import React, { useState, state, Component, useEffect } from 'react';
-import { StyleSheet, Text, Button, View, Dimensions, FlatList, ScrollView, LayoutAnimation, Platform, UIManager, TouchableOpacity } from 'react-native';
-import MapView from 'react-native-maps';
-import Panel from 'react-native-panel';
+import React, { Component, useEffect } from 'react';
+import { StyleSheet, Text, Button, View, Dimensions, Animated, TouchableOpacity } from 'react-native';
+
 import { Ionicons } from '@expo/vector-icons';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 
 
 const { width, height } = Dimensions.get('window');
@@ -25,71 +24,93 @@ class GatePanel extends Component {
         ['Train', '10:50'],
         ['Train', '12:30']
       ],
-      expand : false
+      slideAnim: new Animated.Value(0),
+      rerender: {}
     }
-    
+
+    this.expand = React.createRef(false);
+
+    this.openAnim = Animated.timing(
+      // Animate value over time
+      this.state.slideAnim, // The value to drive
+      {
+        toValue: -height * 0.35, // Animate to final value of 1
+        useNativeDriver: true
+      },
+    );
+
+    this.closeAnim = Animated.timing(
+      // Animate value over time
+      this.state.slideAnim, // The value to drive
+      {
+        toValue: 0, // Animate to final value of 1
+        useNativeDriver: true
+      },
+    );
+
   }
 
 
 
-  onArrowClick = () => {  
-    this.props.onArrowClick(this.state.expand);
-    this.setState({expand: !this.state.expand});
+
+  onArrowClick = () => {
+    this.expand.current = !this.expand.current;
+    if (this.expand.current) {
+      this.openAnim.start();
+    }
+    else {
+      this.closeAnim.start();
+    }
+
+    this.setState({ rerender: {} })
   }
 
   render() {
-    const state = this.state;
     return (
-        <View style={{paddingTop: height*0.75}}>
-          <View style={styles.scrollstyles}>
+      <Animated.View style={{ ...styles.scrollstyles, transform: [{ translateY: this.state.slideAnim }] }}>
 
-            {/* the header section */}
-            {/* scroll up button */}
+        {/* the header section */}
+        {/* scroll up button */}
 
-
-            {/* gate details */}
-            <View style={styles.header}>
-            
-            <TouchableOpacity onPress={() => { this.onArrowClick() }}>
-              <Ionicons style={{ alignSelf: 'center' }} name={this.state.expand ? 'ios-arrow-down' : 'ios-arrow-up'} size={30} color='gray' />
-            </TouchableOpacity>
-              <Text style={styles.gatetitlesize}>Utorda GATE</Text>
-              <View style={styles.leftcontainer}>
-                <View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.headertimingdata}>Next Arrival:</Text>
-                    <Text style={styles.headertimingdata}> 8:30 AM</Text>
-                  </View>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.headertimingdata}>Estimate wait:</Text>
-                    <Text style={styles.headertimingdata}> 5 MIN</Text>
-                  </View>
-                </View>
-                <View style={styles.rightcontainer}>
-                  <Text style={styles.headertimingdata}>Gate Status:</Text>
-                  <Text style={styles.headertimingdata}> OPEN</Text>
-                </View>
-              </View>
+        <View style={styles.Icon}>
+          <TouchableOpacity onPress={() => { this.onArrowClick() }}>
+            <Ionicons name={this.expand.current ? 'ios-arrow-down' : 'ios-arrow-up'} size={30} color='gray' />
+          </TouchableOpacity>
+        </View>
+        {/* gate details */}
+        <View style={styles.header}>
+          <Text style={styles.gatetitlesize}>Utorda GATE</Text>
+          <View style={styles.leftcontainer}>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.headertimingdata}>Next Arrival:</Text>
+              <Text style={styles.headertimingdata}> 8:30 AM</Text>
             </View>
-
-            {/* the hidden section which shows up on button/icon press */}
-            <View style={styles.footerStyles}>
-              <View style={{ justifyContent: 'center' }}>
-                <View style={styles.tablecontainer}>
-                  <Table>
-                    <Row data={state.tableHead} style={styles.thead} textStyle={styles.ttext} />
-                    <Rows data={state.tableData} style={styles.tdatastyle} textStyle={styles.tdatatext} />
-                  </Table>
-                </View>
-                <View style={styles.footerbuttonsContainer}>
-                  <Button title='Bookmark'></Button>
-                  <Button title='Remind Me' ></Button>
-                </View>
-              </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.headertimingdata}>Estimate wait:</Text>
+              <Text style={styles.headertimingdata}> 5 MIN</Text>
             </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.headertimingdata}>Gate Status:</Text>
+              <Text style={styles.headertimingdata}> OPEN</Text>
+            </View>
+          </View>
+        </View>
 
+        {/* the hidden section which shows up on button/icon press */}
+        <View style={styles.footerStyles}>
+          <View style={styles.tablecontainer}>
+            <Table>
+              <Row data={this.state.tableHead} style={styles.thead} textStyle={styles.ttext} />
+              <Rows data={this.state.tableData} style={styles.tdatastyle} textStyle={styles.tdatatext} />
+            </Table>
           </View>
+          <View style={styles.footerbuttonsContainer}>
+            <Button title='Bookmark'></Button>
+            <Button title='Remind Me' ></Button>
           </View>
+        </View>
+
+      </Animated.View>
     );
   }
 }
@@ -101,23 +122,35 @@ const styles = StyleSheet.create({
     height: 30,
     alignItems: 'center',
   },
+
+  Icon: {
+    alignSelf: 'center',
+    position: 'absolute',
+    top: 0
+  },
+
   scrollstyles: {
     backgroundColor: '#F4E0C9',
     borderRadius: 15,
-    borderBottomLeftRadius : 0,
-    borderBottomRightRadius : 0,
-    
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    justifyContent: 'space-evenly',
+    padding: 20,
+    paddingTop:0,
+    height: height * 0.6
+
   },
   header: {
-    marginHorizontal: 20,
-    height: height * 0.25+10
+    height: height * 0.25,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   gatetitlesize: {
     fontSize: 30,
     marginVertical: 8
   },
   leftcontainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
   rightcontainer: {
     flexDirection: 'row',
@@ -127,10 +160,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   footerStyles: {
-    flex: 1,
+    justifyContent: 'space-around',
+    flex:1
+
   },
   tablecontainer: {
-    marginHorizontal: 50,
   },
   thead: {
     backgroundColor: 'black',
@@ -150,11 +184,8 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   footerbuttonsContainer: {
-    marginVertical: 20,
-    marginHorizontal: 40,
     flexDirection: 'row',
-    flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
 
   },
   footerbtnstyles: {

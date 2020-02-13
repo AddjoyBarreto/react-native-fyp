@@ -1,6 +1,6 @@
 import React, { useState, state, Component, useEffect } from 'react';
 import { StyleSheet, Text, Button, View, Dimensions, FlatList, ScrollView, LayoutAnimation, Platform, UIManager, TouchableOpacity } from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import Panel from 'react-native-panel';
 import { Ionicons } from '@expo/vector-icons';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
@@ -26,21 +26,13 @@ class MapPage extends Component {
 
 
 
-  onArrowClick = (expand) => {
-    if (expand) {
-      this.scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true })
-    }
-    else {
-      this.scrollViewRef.current.scrollToEnd({ animated: true });
-    }
-  }
 
   render() {
     const state = this.state;
     return (
 
       <React.Fragment>
-        <ScrollView ref={this.scrollViewRef} scrollEnabled={false}>
+
         <SearchBar />
         <View style={styles.mapcontainer}>
           <MapView style={styles.mapStyle}
@@ -51,28 +43,27 @@ class MapPage extends Component {
               longitudeDelta: 0.0421,
             }}
           >
-          <Marker
-            coordinate={{
-              latitude: 15.3162,
-              longitude: 73.9201,
-            }}
-            title='Majorda Gate, Goa'
-            description=''
-    />
-    <Marker
-            coordinate={{
-              latitude: 15.3243,
-              longitude: 73.9135,
-            }}
-            title='Utorda Gate, Goa'
-            description=''
-    />
-    </MapView>
+            <Marker
+              coordinate={{
+                latitude: 15.3162,
+                longitude: 73.9201,
+              }}
+              title='Majorda Gate, Goa'
+              description=''
+            />
+            <Marker
+              coordinate={{
+                latitude: 15.3243,
+                longitude: 73.9135,
+              }}
+              title='Utorda Gate, Goa'
+              description=''
+            />
+          </MapView>
         </View>
-       
-          <GatePanel onArrowClick={this.onArrowClick} />
 
-        </ScrollView>
+        <GatePanel />
+
       </React.Fragment>
     );
   }
@@ -83,11 +74,10 @@ export default MapPage;
 const styles = StyleSheet.create({
 
   mapcontainer: {
-    position: 'absolute',
     top: 82,
   },
   mapStyle: {
-    
+
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height * 0.75,
   },

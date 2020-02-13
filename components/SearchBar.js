@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
   searchbar: {
     position: 'absolute',
     top: StatusBar.currentHeight,
-    width: width
+    width: width,
   }
 });
