@@ -15,10 +15,10 @@ class MapPage extends Component {
   state = {
     isShowingText: true,
     isLoaded: false,
-    markers: []
+    markers: [],
+    selected: undefined
   };
-  //const [outputText, setOutpotText] = useState(false)
-  //toggleDisplayBio = ()=> setOutpotText(!outputText);
+
   constructor(props) {
     super(props);
     this.scrollViewRef = React.createRef();
@@ -32,6 +32,8 @@ class MapPage extends Component {
       Object.keys(resp.val()).forEach(key => {
         markers.push({ ...resp.val()[key], title: key });
       });
+
+      console.log(markers);
       this.setState({
         markers: markers, isLoaded: true
       });
@@ -50,6 +52,16 @@ class MapPage extends Component {
 
   }
 
+  markerClick = (e)=>{
+    let seleced = this.state.markers.find((item)=>{
+      if(item.lat === e.nativeEvent.coordinate.latitude){
+        return true;
+      }
+      
+    });
+    console.log(seleced)
+    this.setState({selected:seleced});
+  }
 
   render() {
     if (this.state.isLoaded) {
@@ -79,13 +91,14 @@ class MapPage extends Component {
                     title={item.title} 
                     description=''
                     image={require('../assets/train.png')}
+                    onPress={this.markerClick}
                     
                   />
                 );
               })}
             </MapView>
           </View>
-          <GatePanel item={{title:'tdsd'}}/>
+          <GatePanel selected={this.state.selected}/>
         </React.Fragment>
       );
     }

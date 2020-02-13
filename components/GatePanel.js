@@ -67,52 +67,59 @@ class GatePanel extends Component {
   }
 
   render() {
-    return (
-      <Animated.View style={{ ...styles.scrollstyles, transform: [{ translateY: this.state.slideAnim }] }}>
 
-        {/* the header section */}
-        {/* scroll up button */}
+    if (this.props.selected) {
+      return (
+        <Animated.View style={{ ...styles.scrollstyles, transform: [{ translateY: this.state.slideAnim }] }}>
 
-        <View style={styles.Icon}>
-          <TouchableOpacity onPress={() => { this.onArrowClick() }}>
-            <Ionicons name={this.expand.current ? 'ios-arrow-down' : 'ios-arrow-up'} size={30} color='gray' />
-          </TouchableOpacity>
-        </View>
-        {/* gate details */}
-        <View style={styles.header}>
-    <Text style={styles.gatetitlesize}>{this.props.item.title}</Text>
-          <View style={styles.leftcontainer}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.headertimingdata}>Next Arrival:</Text>
-              <Text style={styles.headertimingdata}> 8:30 AM</Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.headertimingdata}>Estimate wait:</Text>
-              <Text style={styles.headertimingdata}> 5 MIN</Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.headertimingdata}>Gate Status:</Text>
-              <Text style={styles.headertimingdata}> OPEN</Text>
+          {/* the header section */}
+          {/* scroll up button */}
+
+          <View style={styles.Icon}>
+            <TouchableOpacity onPress={() => { this.onArrowClick() }}>
+              <Ionicons name={this.expand.current ? 'ios-arrow-down' : 'ios-arrow-up'} size={30} color='gray' />
+            </TouchableOpacity>
+          </View>
+          {/* gate details */}
+          <View style={styles.header}>
+            <Text style={styles.gatetitlesize}>{this.props.selected.title}</Text>
+            <View style={styles.leftcontainer}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.headertimingdata}>Next Arrival:</Text>
+                <Text style={styles.headertimingdata}> 8:30 AM</Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.headertimingdata}>Estimate wait:</Text>
+                <Text style={styles.headertimingdata}> 5 MIN</Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.headertimingdata}>Gate Status:</Text>
+                <Text style={styles.headertimingdata}> OPEN</Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* the hidden section which shows up on button/icon press */}
-        <View style={styles.footerStyles}>
-          <View style={styles.tablecontainer}>
-            <Table>
-              <Row data={this.state.tableHead} style={styles.thead} textStyle={styles.ttext} />
-              <Rows data={this.state.tableData} style={styles.tdatastyle} textStyle={styles.tdatatext} />
-            </Table>
+          {/* the hidden section which shows up on button/icon press */}
+          <View style={styles.footerStyles}>
+            <View style={styles.tablecontainer}>
+              <Table>
+                <Row data={this.state.tableHead} style={styles.thead} textStyle={styles.ttext} />
+                <Rows data={this.state.tableData} style={styles.tdatastyle} textStyle={styles.tdatatext} />
+              </Table>
+            </View>
+            <View style={styles.footerbuttonsContainer}>
+              <Button title='Bookmark'></Button>
+              <Button title='Remind Me'></Button>
+            </View>
           </View>
-          <View style={styles.footerbuttonsContainer}>
-            <Button title='Bookmark'></Button>
-            <Button title='Remind Me'></Button>
-          </View>
-        </View>
 
-      </Animated.View>
-    );
+        </Animated.View>
+      );
+    }
+
+    else{
+      return null;
+    }
   }
 }
 
@@ -137,7 +144,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 0,
     justifyContent: 'space-evenly',
     padding: 20,
-    paddingTop:0,
+    paddingTop: 0,
     height: height * 0.6
 
   },
@@ -159,11 +166,11 @@ const styles = StyleSheet.create({
   },
   headertimingdata: {
     fontSize: 17,
-    fontWeight:'400'
+    fontWeight: '400'
   },
   footerStyles: {
     justifyContent: 'space-around',
-    flex:1
+    flex: 1
 
   },
   tablecontainer: {
