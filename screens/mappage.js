@@ -5,16 +5,18 @@ import Panel from 'react-native-panel';
 import { Ionicons } from '@expo/vector-icons';
 import GatePanel from '../components/GatePanel'
 import SearchBar from '../components/SearchBar'
-
-
-
+import firebase from 'firebase'
+import { FontAwesome } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 
-
 class MapPage extends Component {
 
-  state = { isShowingText: true };
+  state = {
+    isShowingText: true,
+    isLoaded: false,
+    markers: []
+  };
   //const [outputText, setOutpotText] = useState(false)
   //toggleDisplayBio = ()=> setOutpotText(!outputText);
   constructor(props) {
@@ -23,45 +25,73 @@ class MapPage extends Component {
 
   }
 
+  componentDidMount() {
+
+    firebase.database().ref('/stations').once('value').then((resp) => {
+      const markers = [];
+      Object.keys(resp.val()).forEach(key => {
+        markers.push({ ...resp.val()[key], title: key });
+      });
+      this.setState({
+        markers: markers, isLoaded: true
+      });
+
+    }).catch((err) => {
+      console.log(err);
+    });
+
+
+    // this.listern = firebase.database().ref('/time').on('value', (snapshot) => {
+    //   console.log("change" + snapshot.val());
+    // });
+  }
+
+  componentWillUnmount() {
+
+  }
 
 
   render() {
-    const state = this.state;
-    return (
+    if (this.state.isLoaded) {
+      return (
 
-      <React.Fragment>
+        <React.Fragment>
 
-        <SearchBar />
-        <View style={styles.mapcontainer}>
-          <MapView style={styles.mapStyle}
-            initialRegion={{
-              latitude: 15.3243,
-              longitude: 73.9135,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-          >
-            <Marker
-              coordinate={{
-                latitude: 15.3162,
-                longitude: 73.9201,
-              }}
-              title='Majorda Gate, Goa'
-              description=''
-            />
-            <Marker
-              coordinate={{
+          <SearchBar />
+          <View style={styles.mapcontainer}>
+            <MapView style={styles.mapStyle}
+              initialRegion={{
                 latitude: 15.3243,
                 longitude: 73.9135,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
               }}
-              title='Utorda Gate, Goa'
-              description=''
-            />
-          </MapView>
-        </View>
-        <GatePanel />
-      </React.Fragment>
-    );
+            >
+
+              {this.state.markers.map((item) => {
+                return (
+                  <Marker
+                  key={Math.random().toString()}
+                    coordinate={{
+                      latitude: item.lat,
+                      longitude: item.lon,
+                    }}
+                    title={item.title} 
+                    description=''
+                    image={require('../assets/train.png')}
+                    
+                  />
+                );
+              })}
+            </MapView>
+          </View>
+          <GatePanel item={{title:'tdsd'}}/>
+        </React.Fragment>
+      );
+    }
+    else {
+      return null;
+    }
   }
 }
 

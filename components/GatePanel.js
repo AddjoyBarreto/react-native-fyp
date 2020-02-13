@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Table, Row, Rows } from 'react-native-table-component';
 
 
+
 const { width, height } = Dimensions.get('window');
 
 
@@ -79,7 +80,7 @@ class GatePanel extends Component {
         </View>
         {/* gate details */}
         <View style={styles.header}>
-          <Text style={styles.gatetitlesize}>Utorda GATE</Text>
+    <Text style={styles.gatetitlesize}>{this.props.item.title}</Text>
           <View style={styles.leftcontainer}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.headertimingdata}>Next Arrival:</Text>
