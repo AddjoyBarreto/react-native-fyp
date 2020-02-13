@@ -13,7 +13,7 @@ class MapPage extends Component {
 
     render(){
     return (
-        
+        <ScrollView>
       <View style={styles.container}>
         <View style={styles.mapcontainer}>
             <MapView style={styles.mapStyle}
@@ -27,7 +27,7 @@ class MapPage extends Component {
         </View>
         {/* end of map */}
             <View style={styles.scrollstyles}>           
-                <ScrollView>
+                
                     {/* the header section */}
                     {/* scroll up button */}
                     <View style={styles.scrollupbtn}>
@@ -56,14 +56,16 @@ class MapPage extends Component {
 
                     {/* the hidden section which shows up on button/icon press */}
                     <View style={styles.fotterStyles}>
-                    <View style={{height:'75%',justifyContent:'center',backgroundColor:'yellow'}}>
-                    <Text>hey there</Text>
-                    </View>            
+                        <View style={{height:'75%',justifyContent:'center',backgroundColor:'yellow'}}>
+                            <Text>hey there</Text>
+                        </View>            
                     </View>
-            </ScrollView>
+            
+
+
             </View> 
       </View>
-     
+      </ScrollView>
     );
   }
 }
@@ -80,22 +82,23 @@ class MapPage extends Component {
     mapStyle: {
         justifyContent:'flex-start',
         width: Dimensions.get('window').width,
-        height: '100%',
+        height: Dimensions.get('window').height*0.75,
       },
       scrollupbtn:{
         height: 30,
         alignItems:'center',
       },
       scrollstyles:{
-        minHeight:'25%',
         backgroundColor:'#F4E0C9',
+        borderRadius:15,
+        top:-10,
       },
       header:{
           marginHorizontal:20,
       },
       gatetitlesize:{
         fontSize:30,
-        marginVertical:10
+        marginVertical:8
       },
       leftcontainer:{
         flexDirection:'row',
