@@ -1,6 +1,6 @@
 import React, { useState, state, Component, useEffect } from 'react';
 import { StyleSheet, Text, Button, View, Dimensions, FlatList, ScrollView, LayoutAnimation, Platform, UIManager, TouchableOpacity } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import Panel from 'react-native-panel';
 import { Ionicons } from '@expo/vector-icons';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
@@ -50,7 +50,24 @@ class MapPage extends Component {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
-          />
+          >
+          <Marker
+            coordinate={{
+              latitude: 15.3162,
+              longitude: 73.9201,
+            }}
+            title='Majorda Gate, Goa'
+            description=''
+    />
+    <Marker
+            coordinate={{
+              latitude: 15.3243,
+              longitude: 73.9135,
+            }}
+            title='Utorda Gate, Goa'
+            description=''
+    />
+    </MapView>
         </View>
        
           <GatePanel onArrowClick={this.onArrowClick} />

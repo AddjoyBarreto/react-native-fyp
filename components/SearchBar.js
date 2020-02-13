@@ -24,6 +24,8 @@ export default class TopSearch extends React.Component {
           placeholder="Type Here..."
           onChangeText={this.updateSearch}
           value={search}
+          round
+          lightTheme={true}
         />
       </View>
     );
