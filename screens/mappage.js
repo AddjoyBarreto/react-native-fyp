@@ -78,8 +78,8 @@ class MapPage extends Component {
                                 </Table>
                             </View>
                             <View style={styles.footerbuttonsContainer}>
-                                <Button title='Bookmark' color='white' style={styles.footerbtnstyles}></Button>
-                                <Button title='Remind Me' color='white' ></Button>
+                                <Button title='Bookmark'></Button>
+                                <Button title='Remind Me' ></Button>
                             </View>
                         </View>            
                     </View>
