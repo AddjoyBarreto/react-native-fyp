@@ -1,6 +1,6 @@
 import React, { Component, useEffect } from 'react';
-import { StyleSheet, Text, Button, View, Dimensions, Animated, TouchableOpacity } from 'react-native';
-
+import { StyleSheet, Text, View, Dimensions, Animated, TouchableOpacity } from 'react-native';
+import { Button } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import { Table, Row, Rows } from 'react-native-table-component';
 
@@ -106,7 +106,7 @@ class GatePanel extends Component {
           </View>
           <View style={styles.footerbuttonsContainer}>
             <Button title='Bookmark'></Button>
-            <Button title='Remind Me' ></Button>
+            <Button title='Remind Me'></Button>
           </View>
         </View>
 
@@ -157,7 +157,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   headertimingdata: {
-    fontSize: 18,
+    fontSize: 17,
+    fontWeight:'400'
   },
   footerStyles: {
     justifyContent: 'space-around',

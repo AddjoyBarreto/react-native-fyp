@@ -3,7 +3,6 @@ import { StyleSheet, Text, Button, View, Dimensions, FlatList, ScrollView, Layou
 import MapView, { Marker } from 'react-native-maps';
 import Panel from 'react-native-panel';
 import { Ionicons } from '@expo/vector-icons';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import GatePanel from '../components/GatePanel'
 import SearchBar from '../components/SearchBar'
 
@@ -20,10 +19,9 @@ class MapPage extends Component {
   //toggleDisplayBio = ()=> setOutpotText(!outputText);
   constructor(props) {
     super(props);
-
     this.scrollViewRef = React.createRef();
-  }
 
+  }
 
 
 
@@ -61,9 +59,7 @@ class MapPage extends Component {
             />
           </MapView>
         </View>
-
         <GatePanel />
-
       </React.Fragment>
     );
   }

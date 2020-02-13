@@ -26,6 +26,7 @@ export default class TopSearch extends React.Component {
           value={search}
           round
           lightTheme={true}
+          
         />
       </View>
     );
@@ -35,7 +36,7 @@ export default class TopSearch extends React.Component {
 const styles = StyleSheet.create({
   searchbar: {
     position: 'absolute',
-    top: StatusBar.currentHeight,
+    marginTop: StatusBar.currentHeight,
     width: width,
   }
 });

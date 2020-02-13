@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, Button ,View, Dimensions, ScrollView, LayoutAnimation, Platform, UIManager, TouchableOpacity } from 'react-native';
-import MapView from 'react-native-maps';
-import Panel from 'react-native-panel';
+import { StyleSheet, Dimensions } from 'react-native';
 import MapPage from './screens/mappage';
 
-const { width, height } = Dimensions.get('window'); 
+
+
+
 
 
 export default function App() {
@@ -12,9 +12,3 @@ export default function App() {
     <MapPage />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
