@@ -3,6 +3,7 @@ import { StyleSheet, Text, Button ,View, Dimensions, FlatList ,ScrollView, Layou
 import MapView from 'react-native-maps';
 import Panel from 'react-native-panel';
 import { Ionicons } from '@expo/vector-icons';
+import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
 const { width, height } = Dimensions.get('window'); 
 class MapPage extends Component {
@@ -10,8 +11,21 @@ class MapPage extends Component {
     state = { isShowingText: true };
     //const [outputText, setOutpotText] = useState(false)
     //toggleDisplayBio = ()=> setOutpotText(!outputText);
+    constructor(props) {
+        super(props);
+        this.state = {
+          tableHead: ['Train', 'Time'],
+          tableData: [
+            ['Train', '8:45'],
+            ['Train', '9:45'],
+            ['Train', '10:50'],
+            ['Train', '12:30']
+          ]
+        }
+      }
 
     render(){
+        const state = this.state;
     return (
         <ScrollView>
       <View style={styles.container}>
@@ -55,9 +69,18 @@ class MapPage extends Component {
                     </View>
 
                     {/* the hidden section which shows up on button/icon press */}
-                    <View style={styles.fotterStyles}>
-                        <View style={{height:'75%',justifyContent:'center',backgroundColor:'yellow'}}>
-                            <Text>hey there</Text>
+                    <View style={styles.footerStyles}>
+                        <View style={{height:'75%',justifyContent:'center'}}>
+                            <View style={styles.tablecontainer}>
+                                <Table>
+                                <Row data={state.tableHead} style={styles.thead} textStyle={styles.ttext}/>
+                                <Rows data={state.tableData} style={styles.tdatastyle} textStyle={styles.tdatatext}/>
+                                </Table>
+                            </View>
+                            <View style={styles.footerbuttonsContainer}>
+                                <Button title='Bookmark' color='white' style={styles.footerbtnstyles}></Button>
+                                <Button title='Remind Me' color='white' ></Button>
+                            </View>
                         </View>            
                     </View>
             
@@ -110,8 +133,43 @@ class MapPage extends Component {
       headertimingdata:{
           fontSize:18,
       },
-      fotterStyles:{
+      footerStyles:{
         flex:1,
       },
+      tablecontainer:{
+          marginHorizontal:50,
+          marginTop:60,
+      },
+      thead:{
+          backgroundColor:'black',
+      },
+      ttext:{
+          fontSize:20,
+          color:'white',
+          textAlign:'center'
+      },
+      tdatastyle:{
+        backgroundColor:'white',
+        borderBottomWidth: 0.5,
+        borderBottomColor:'gray',
+      },
+      tdatatext:{
+        fontSize:20,
+        textAlign:'center'
+    },
+    footerbuttonsContainer:{
+        marginVertical:20,
+        marginHorizontal:40,
+        flexDirection:'row',
+        flex:1,
+        justifyContent:'space-between'
+    },
+    footerbtnstyles:{
+        backgroundColor:'white',
+        color:'black',
+        borderColor:'black',
+        borderWidth:0.5,
+        borderRadius:5,
+    }
   });
   
