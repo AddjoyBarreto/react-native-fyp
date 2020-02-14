@@ -24,8 +24,9 @@ export default class TopSearch extends React.Component {
           placeholder="Type Here..."
           onChangeText={this.updateSearch}
           value={search}
-          round
-          lightTheme={true}
+          platform='ios'
+          lightTheme={false}
+          containerStyle={{backgroundColor:'#F4E0C9'}}
           
         />
       </View>
@@ -36,7 +37,7 @@ export default class TopSearch extends React.Component {
 const styles = StyleSheet.create({
   searchbar: {
     position: 'absolute',
-    marginTop: StatusBar.currentHeight,
+    marginTop: StatusBar.currentHeight-5,
     width: width,
   }
 });

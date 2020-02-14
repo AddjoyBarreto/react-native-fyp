@@ -36,7 +36,8 @@ class GatePanel extends Component {
       this.state.slideAnim, // The value to drive
       {
         toValue: -height * 0.60, // Animate to final value of 1
-        useNativeDriver: true
+        useNativeDriver: true,
+        duration:200
       },
     );
 
@@ -45,7 +46,9 @@ class GatePanel extends Component {
       this.state.slideAnim, // The value to drive
       {
         toValue: -height * 0.25, // Animate to final value of 1
-        useNativeDriver: true
+        useNativeDriver: true,
+        duration:200
+        
       },
     );
 

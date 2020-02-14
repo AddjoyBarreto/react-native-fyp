@@ -18,7 +18,9 @@
     "react-native-panel": "^1.0.4",
     "react-native-searchable-dropdown": "^1.1.1",
     "react-native-table-component": "^1.2.1",
-    "react-native-web": "~0.11.7"
+    "react-native-web": "~0.11.7",
+    "rn-modal-picker": "^0.2.7",
+    "why-did-you-update": "^1.0.6"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.0.0",

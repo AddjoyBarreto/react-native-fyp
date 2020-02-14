@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const Hoc = (props) => {
+    useEffect(()=>{
+        console.log('hoc rerender');
+    });
+
     return (props.children);
 };
 
