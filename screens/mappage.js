@@ -1,4 +1,4 @@
-import React, { useState, state, Component, useEffect } from 'react';
+import React, { useState, state, Component, useEffect, useRef } from 'react';
 import { StyleSheet, Text, Button, View, Dimensions, FlatList, ScrollView, LayoutAnimation, Platform, UIManager, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Panel from 'react-native-panel';
@@ -6,27 +6,21 @@ import { Ionicons } from '@expo/vector-icons';
 import GatePanel from '../components/GatePanel'
 import SearchBar from '../components/SearchBar'
 import firebase from 'firebase'
-import { FontAwesome } from '@expo/vector-icons';
+import Hoc from '../components/Hoc'
 
 const { width, height } = Dimensions.get('window');
 
-class MapPage extends Component {
 
-  state = {
-    isShowingText: true,
-    isLoaded: false,
-    markers: [],
-    selected: undefined
-  };
 
-  constructor(props) {
-    super(props);
-    this.scrollViewRef = React.createRef();
+const MapPage = (props) => {
 
-  }
+  const [isShowingText, setIsShowingText] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [markers, setMarkers] = useState([]);
+  const [selected, setSelected] = useState(undefined);
+  scrollViewRef = useRef();
 
-  componentDidMount() {
-
+  useEffect((() => {
     firebase.database().ref('/stations').once('value').then((resp) => {
       const markers = [];
       Object.keys(resp.val()).forEach(key => {
@@ -34,42 +28,39 @@ class MapPage extends Component {
       });
 
       console.log(markers);
-      this.setState({
-        markers: markers, isLoaded: true
-      });
+      setMarkers(markers);
+      setIsLoaded(true);
 
     }).catch((err) => {
       console.log(err);
     });
+  }), []);
 
 
-    // this.listern = firebase.database().ref('/time').on('value', (snapshot) => {
-    //   console.log("change" + snapshot.val());
-    // });
-  }
+  // this.listern = firebase.database().ref('/time').on('value', (snapshot) => {
+  //   console.log("change" + snapshot.val());
+  // });
 
-  componentWillUnmount() {
 
-  }
 
-  markerClick = (e)=>{
-    let seleced = this.state.markers.find((item)=>{
-      if(item.lat === e.nativeEvent.coordinate.latitude){
+
+  const markerClick = (e) => {
+    let seleced = markers.find((item) => {
+      if (item.lat === e.nativeEvent.coordinate.latitude) {
         return true;
       }
-      
     });
-    console.log(seleced)
-    this.setState({selected:seleced});
+    setSelected(seleced);
   }
 
-  render() {
-    if (this.state.isLoaded) {
-      return (
 
-        <React.Fragment>
+  if (isLoaded) {
+    return (
 
+      <React.Fragment>
+        
           <SearchBar />
+          <Hoc>
           <View style={styles.mapcontainer}>
             <MapView style={styles.mapStyle}
               initialRegion={{
@@ -80,31 +71,32 @@ class MapPage extends Component {
               }}
             >
 
-              {this.state.markers.map((item) => {
+              {markers.map((item) => {
                 return (
                   <Marker
-                  key={Math.random().toString()}
+                    key={Math.random().toString()}
                     coordinate={{
                       latitude: item.lat,
                       longitude: item.lon,
                     }}
-                    title={item.title} 
+                    title={item.title}
                     description=''
                     image={require('../assets/train.png')}
-                    onPress={this.markerClick}
-                    
+                    onPress={markerClick}
+
                   />
                 );
               })}
             </MapView>
           </View>
-          <GatePanel selected={this.state.selected}/>
-        </React.Fragment>
-      );
-    }
-    else {
-      return null;
-    }
+        </Hoc>
+
+        <GatePanel selected={selected} />
+      </React.Fragment>
+    );
+  }
+  else {
+    return null;
   }
 }
 
@@ -118,7 +110,7 @@ const styles = StyleSheet.create({
   mapStyle: {
 
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height * 0.75,
+    height: Dimensions.get('window').height,
   },
 
 });

@@ -25,7 +25,7 @@ class GatePanel extends Component {
         ['Train', '10:50'],
         ['Train', '12:30']
       ],
-      slideAnim: new Animated.Value(0),
+      slideAnim: new Animated.Value(-height * 0.25),
       rerender: {}
     }
 
@@ -35,7 +35,7 @@ class GatePanel extends Component {
       // Animate value over time
       this.state.slideAnim, // The value to drive
       {
-        toValue: -height * 0.35, // Animate to final value of 1
+        toValue: -height * 0.60, // Animate to final value of 1
         useNativeDriver: true
       },
     );
@@ -44,14 +44,12 @@ class GatePanel extends Component {
       // Animate value over time
       this.state.slideAnim, // The value to drive
       {
-        toValue: 0, // Animate to final value of 1
+        toValue: -height * 0.25, // Animate to final value of 1
         useNativeDriver: true
       },
     );
 
   }
-
-
 
 
   onArrowClick = () => {
@@ -94,7 +92,7 @@ class GatePanel extends Component {
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.headertimingdata}>Gate Status:</Text>
-                <Text style={styles.headertimingdata}> OPEN</Text>
+      <Text style={styles.headertimingdata}> {this.props.selected.status ? 'OPEN' : 'CLOSE'}</Text>
               </View>
             </View>
           </View>
@@ -145,7 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     padding: 20,
     paddingTop: 0,
-    height: height * 0.6
+    height: height * 0.6,
 
   },
   header: {
