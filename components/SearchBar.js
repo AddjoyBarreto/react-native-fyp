@@ -12,7 +12,7 @@ export default withNavigation(class TopSearch extends React.Component {
   state = {
     search: '',
     dropdownVisible: false,
-    arrayholder : [this.props.markers]
+    arrayholder : this.props.markers
   };
 
   searchRef = React.createRef();
