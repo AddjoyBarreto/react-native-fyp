@@ -21,19 +21,21 @@ const MapPage = (props) => {
   scrollViewRef = useRef();
 
   useEffect((() => {
-    firebase.database().ref('/stations').once('value').then((resp) => {
+    const stationRef = firebase.database().ref('/stations');
+    stationRef.on('value', (resp) => {
       const markers = [];
-
       Object.values(resp.val()).forEach(((element) => {
         markers.push({ title: element.name, lat: element.lat, lon: element.lon, status: element.status });
       }))
       setMarkers(markers);
       setIsLoaded(true);
 
-    }).catch((err) => {
-      console.log(err);
     });
-  }), []);
+    return (() => {
+      stationRef.off();
+    });
+  }
+  ), []);
 
 
   const markerClick = React.useCallback((e) => {
