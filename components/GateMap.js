@@ -72,7 +72,7 @@ export default React.memo(GateMap);
 const styles = StyleSheet.create({
 
     mapcontainer: {
-        top: StatusBar.currentHeight,
+        // top: StatusBar.currentHeight,
     },
     mapStyle: {
 

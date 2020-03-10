@@ -4,6 +4,10 @@
     "slug": "projectmap",
     "privacy": "public",
     "sdkVersion": "36.0.0",
+    "androidStatusBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#F4E0C9"
+    },
     "platforms": [
       "ios",
       "android",

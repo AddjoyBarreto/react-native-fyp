@@ -52,9 +52,10 @@ export default withNavigation(class TopSearch extends React.Component {
             lightTheme={false}
             containerStyle={{
               backgroundColor: '#F4E0C9',
-              flex: 1
+              flex: 1,
+              height:55
             }}
-            inputContainerStyle={{ backgroundColor: '#F4E0C9', height: 35 }}
+            inputContainerStyle={{ backgroundColor: 'white', height: 43 }}
             inputStyle={{ color: 'black', marginLeft: 20 }}
             searchIcon={{ color: 'black' }}
             cancelIcon={{ color: 'black' }}
@@ -102,7 +103,7 @@ export default withNavigation(class TopSearch extends React.Component {
 const styles = StyleSheet.create({
   searchbar: {
     position: 'absolute',
-    marginTop: StatusBar.currentHeight,
+    // marginTop: StatusBar.currentHeight,
     width: width,
     overflow: 'visible',
     zIndex: 10,
