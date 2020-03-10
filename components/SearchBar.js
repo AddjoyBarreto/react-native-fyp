@@ -11,13 +11,21 @@ const { width, height } = Dimensions.get('window');
 export default withNavigation(class TopSearch extends React.Component {
   state = {
     search: '',
-    dropdownVisible: false
+    dropdownVisible: false,
+    arrayholder : [this.props.markers]
   };
 
   searchRef = React.createRef();
 
   updateSearch = search => {
     this.setState({ search });
+    const newData = this.props.markers.filter(item => {
+        const itemData = `${item.title.toUpperCase()}`;
+        const textData = search.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+    });
+    this.setState({arrayholder: newData});
+    
   };
 
   render() {
@@ -62,7 +70,7 @@ export default withNavigation(class TopSearch extends React.Component {
               backgroundColor: 'rgba(255,255,255,255.5)',
             }}>
 
-            {this.props.markers.map((item) => {
+            {this.state.arrayholder.map((item) => {
               return (
                 <TouchableOpacity
                   key={item.title}

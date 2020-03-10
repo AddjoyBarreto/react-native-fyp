@@ -61,7 +61,7 @@ const MapPage = (props) => {
     return (
 
       <View style={{ backgroundColor: '#F4E0C9' }}>
-        <SearchBar markers={markers} itemSelect={itemSelect}/>
+        <SearchBar markers={markers} itemSelect={itemSelect} />
         <GateMap markerClick={markerClick}
           markers={markers}
           selected={selected}
