@@ -8,8 +8,16 @@ import { AppLoading } from 'expo';
 import firebase from 'firebase';
 import PhoneAuthTest from './components/PhoneAuthTest';
 import NAVIGATOR from './navigation/navigator';
+import { YellowBox } from 'react-native';
+import _ from 'lodash';
 
-
+YellowBox.ignoreWarnings(['Setting a timer']);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message);
+  }
+};
 //Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCNi4HBjKxbE93PcUOQfd62d_IulUGx2j4",
