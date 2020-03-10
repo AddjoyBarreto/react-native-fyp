@@ -1,15 +1,30 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, Dimensions, View } from 'react-native'
+import React, { useEffect, useState, useRef } from 'react'
+import { StyleSheet, Dimensions, View, StatusBar } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
 
 const GateMap = (props) => {
+    const mapref = useRef();
+    const markerRefs = useRef({})
     useEffect(() => {
-        
-    });
+        if (props.selected) {
+            mapref.current.animateCamera({
+                center: {
+                    latitude: props.selected.lat,
+                    longitude: props.selected.lon,
+                }
+            });
+            markerRefs.current[props.selected.title].showCallout();
+        }
+
+    }, [props.selected])
 
     return (
         <View style={styles.mapcontainer} >
-            <MapView style={styles.mapStyle}
+            <MapView
+                moveOnMarkerPress={false}
+                ref={mapref}
+                onPress={() => { props.mapClick() }}
+                style={styles.mapStyle}
                 initialRegion={{
                     latitude: 15.3243,
                     longitude: 73.9135,
@@ -21,7 +36,8 @@ const GateMap = (props) => {
                 {props.markers.map((item) => {
                     return (
                         <Marker
-                            key={Math.random().toString()}
+                            key={item.title}
+                            ref={ (ref)=>{markerRefs.current[item.title] = ref}}
                             coordinate={{
                                 latitude: item.lat,
                                 longitude: item.lon,
@@ -35,16 +51,14 @@ const GateMap = (props) => {
                     );
                 })}
 
-                {props.selected ? (<Marker
-                    key={Math.random().toString()}
+                {/* {props.selected ? (<Marker
                     coordinate={{
                         latitude: props.selected.lat,
                         longitude: props.selected.lon,
                     }}
                     title={props.selected.title}
                     description=''
-                    
-                />) : null}
+                />) : null} */}
 
 
             </MapView>
@@ -58,7 +72,7 @@ export default React.memo(GateMap);
 const styles = StyleSheet.create({
 
     mapcontainer: {
-        top: 82,
+        top: StatusBar.currentHeight,
     },
     mapStyle: {
 

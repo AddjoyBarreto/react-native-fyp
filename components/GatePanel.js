@@ -4,8 +4,11 @@ import { Button } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import { Table, Row, Rows } from 'react-native-table-component';
 
+import ExpoEnd from '../ExpoEnd'
+
 const { width, height } = Dimensions.get('window');
 
+ExpoEnd();
 
 class GatePanel extends Component {
 
@@ -64,10 +67,8 @@ class GatePanel extends Component {
     this.setState({ rerender: {} })
   }
 
-
-
   render() {
-    const navigation = this.props.navigation
+
     if (this.props.selected) {
       return (
         <Animated.View style={{ ...styles.scrollstyles, transform: [{ translateY: this.state.slideAnim }] }}>
@@ -108,8 +109,8 @@ class GatePanel extends Component {
               </Table>
             </View>
             <View style={styles.footerbuttonsContainer}>
-              <Button title='Bookmark' />
-              <Button title='Remind Me'/>
+              <Button title='Bookmark'></Button>
+              <Button title='Remind Me'></Button>
             </View>
           </View>
 
@@ -166,7 +167,8 @@ const styles = StyleSheet.create({
   },
   headertimingdata: {
     fontSize: 17,
-    fontWeight: '400'
+    fontWeight: '400',
+    color:'gray'
   },
   footerStyles: {
     justifyContent: 'space-around',
