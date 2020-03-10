@@ -68,7 +68,7 @@ export default withNavigation(class TopSearch extends React.Component {
               padding: 10,
               paddingHorizontal: 0,
               paddingVertical: 0,
-              backgroundColor: 'rgba(255,255,255,255.5)',
+              backgroundColor: '#F4E0C9',
             }}>
 
             {this.state.arrayholder.map((item) => {
