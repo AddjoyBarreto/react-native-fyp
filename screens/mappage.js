@@ -1,12 +1,10 @@
 import React, { useState, state, Component, useEffect, useRef } from 'react';
 import { StyleSheet, Text, Button, View, Dimensions, FlatList, ScrollView, LayoutAnimation, Platform, UIManager, TouchableOpacity, Keyboard } from 'react-native';
-
-
 import { Ionicons } from '@expo/vector-icons';
-import GatePanel from '../components/GatePanel'
-import SearchBar from '../components/SearchBar'
-import firebase from 'firebase'
-import GateMap from '../components/GateMap'
+import GatePanel from '../components/GatePanel';
+import SearchBar from '../components/SearchBar';
+import firebase from 'firebase';
+import GateMap from '../components/GateMap';
 
 
 const { width, height } = Dimensions.get('window');
@@ -62,7 +60,7 @@ const MapPage = (props) => {
       <View style={{backgroundColor:'#F4E0C9'}}>
         <SearchBar />
         <GateMap markerClick={markerClick} markers={markers} selected={selected}/>
-        <GatePanel selected={selected} />
+        <GatePanel selected={selected}/>
       </View>
     );
   }
