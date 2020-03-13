@@ -26,10 +26,8 @@ class GatePanel extends Component {
         ['Train', '12:30']
       ],
       slideAnim: new Animated.Value(-height * 0.25),
-      rerender: {}
+      expand: false
     }
-
-    this.expand = React.createRef(false);
 
     this.openAnim = Animated.timing(
       // Animate value over time
@@ -37,7 +35,7 @@ class GatePanel extends Component {
       {
         toValue: -height * 0.60, // Animate to final value of 1
         useNativeDriver: true,
-        duration:200
+        duration: 200
       },
     );
 
@@ -47,24 +45,27 @@ class GatePanel extends Component {
       {
         toValue: -height * 0.25, // Animate to final value of 1
         useNativeDriver: true,
-        duration:200
-        
+        duration: 200
+
       },
     );
 
   }
+  componentDidUpdate(prevprops) {
+    if (!this.props.selected && this.state.expand) {
+      this.setState({ expand: false })
+    }
+  }
 
 
   onArrowClick = () => {
-    this.expand.current = !this.expand.current;
-    if (this.expand.current) {
+    if (!this.state.expand) {
       this.openAnim.start();
     }
     else {
       this.closeAnim.start();
     }
-
-    this.setState({ rerender: {} })
+    this.setState({ expand: !this.state.expand });
   }
 
   render() {
@@ -78,7 +79,7 @@ class GatePanel extends Component {
 
           <View style={styles.Icon}>
             <TouchableOpacity onPress={() => { this.onArrowClick() }}>
-              <Ionicons name={this.expand.current ? 'ios-arrow-down' : 'ios-arrow-up'} size={30} color='gray' />
+              <Ionicons name={this.state.expand ? 'ios-arrow-down' : 'ios-arrow-up'} size={40} color='gray' />
             </TouchableOpacity>
           </View>
           {/* gate details */}
@@ -95,7 +96,7 @@ class GatePanel extends Component {
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={styles.headertimingdata}>Gate Status:</Text>
-      <Text style={styles.headertimingdata}> {this.props.selected.status ? 'OPEN' : 'CLOSE'}</Text>
+                <Text style={styles.headertimingdata}> {this.props.selected.status ? 'OPEN' : 'CLOSE'}</Text>
               </View>
             </View>
           </View>
@@ -118,7 +119,7 @@ class GatePanel extends Component {
       );
     }
 
-    else{
+    else {
       return null;
     }
   }
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
   headertimingdata: {
     fontSize: 17,
     fontWeight: '400',
-    color:'gray'
+    color: 'gray'
   },
   footerStyles: {
     justifyContent: 'space-around',

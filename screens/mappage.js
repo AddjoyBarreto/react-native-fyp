@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Dimensions, StatusBar, Modal, Alert, Text, TouchableHighlight } from 'react-native';
+import { View, Dimensions, ActivityIndicator, StyleSheet } from 'react-native';
 
 
 import { Ionicons } from '@expo/vector-icons';
@@ -73,7 +73,11 @@ const MapPage = (props) => {
     );
   }
   else {
-    return null;
+    return (
+      <View style={{ ...StyleSheet.absoluteFill }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 }
 
