@@ -29,6 +29,10 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.railgo",
+      "versionCode": 1
     }
   }
 }

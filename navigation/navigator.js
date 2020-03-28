@@ -1,6 +1,6 @@
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import {createDrawerNavigator} from 'react-navigation-drawer';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import StartPage from '../screens/StartPage';
 import MapPage from '../screens/mappage';
 import Bookmark from '../screens/Bookmark';
@@ -12,15 +12,15 @@ const sideDrawer = createDrawerNavigator({
         screen: MapPage,
     },
     Bookmark: {
-        screen:Bookmark,
+        screen: Bookmark,
     },
-    SignOut:{
+    SignOut: {
         screen: StartPage,
-    }  
-  });
-  
+    }
+});
 
-  
+
+
 const MySwitchNavigator = createSwitchNavigator({
     Startpage: {
         screen: StartPage
@@ -31,8 +31,8 @@ const MySwitchNavigator = createSwitchNavigator({
     Bookmark: {
         screen: sideDrawer
     },
-  });
+});
 
 
-  export default createAppContainer(MySwitchNavigator);
+export default createAppContainer(MySwitchNavigator);
 
