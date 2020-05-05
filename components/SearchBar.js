@@ -12,7 +12,7 @@ export default withNavigation(class TopSearch extends React.Component {
   state = {
     search: '',
     dropdownVisible: false,
-    arrayholder : this.props.markers
+    arrayholder: this.props.markers
   };
 
   searchRef = React.createRef();
@@ -20,12 +20,12 @@ export default withNavigation(class TopSearch extends React.Component {
   updateSearch = search => {
     this.setState({ search });
     const newData = this.props.markers.filter(item => {
-        const itemData = `${item.title.toUpperCase()}`;
-        const textData = search.toUpperCase();
-        return itemData.indexOf(textData) > -1;
+      const itemData = `${item.title.toUpperCase()}`;
+      const textData = search.toUpperCase();
+      return itemData.indexOf(textData) > -1;
     });
-    this.setState({arrayholder: newData});
-    
+    this.setState({ arrayholder: newData });
+
   };
 
   render() {
@@ -53,7 +53,7 @@ export default withNavigation(class TopSearch extends React.Component {
             containerStyle={{
               backgroundColor: '#F4E0C9',
               flex: 1,
-              height:55
+              height: 55
             }}
             inputContainerStyle={{ backgroundColor: 'white', height: 43 }}
             inputStyle={{ color: 'black', marginLeft: 20 }}
@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     width: width,
     overflow: 'visible',
     zIndex: 10,
-    width: '100%'
+    width: '100%',
+    top: StatusBar.currentHeight
   }
 });
