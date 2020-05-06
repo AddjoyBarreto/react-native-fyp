@@ -75,16 +75,6 @@ export default class App extends Component {
     });
   };
 
-  componentDidMount(){
-    console.log("component did mount outer");
-    let newuser = {
-      email:"keane123@gmail.com",
-      password:"keane123"
-    }
-    //this.createuser(newuser)
-    this.notificationmodule(newuser);
-  }
-
   notificationmodule = async(newuser)=>{
     await firebase.auth().signInWithEmailAndPassword(newuser.email, newuser.password).then(user=>{
       console.log("noti");
@@ -99,11 +89,18 @@ export default class App extends Component {
     try {
       await firebase.auth().createUserWithEmailAndPassword(newuser.email, newuser.password)
       let userid = firebase.auth().currentUser.uid
+
       let db = firebase.firestore().collection("users").doc(userid)
       db.set({
           email: newuser.email,
           password: newuser.password,
       });
+
+
+      firebase.database().ref('users').child(userid).set({
+        email: newuser.email,
+        password: newuser.password})
+
       console.log("data Saved")
       this.notificationmodule(newuser); 
   }
@@ -136,11 +133,36 @@ export default class App extends Component {
     console.log('token',token);
     // POST the token to our backend so we can use it to send pushes from there
     let userid = firebase.auth().currentUser.uid
+    console.log('userid',userid);
     var updates = {}
     updates['/expoToken'] = token
-    await firebase.database().ref('/users/' + userid).update(updates)
+    //real time db
+    await firebase.database().ref('users/'+ userid).update({ expoToken: token })
     //call the push notification 
+    var db = firebase.firestore();
+
+    //firestore
+    db.collection("users").doc(userid).update({
+          expoToken: token,
+      }).then(function() {
+          console.log("Document successfully written!");
+      }).catch(function(error) {
+          console.error("Error writing document: ", error);
+      });
+
+    console.log('token saved')
 }
+
+componentDidMount(){
+  console.log("component did mount outer");
+  let newuser = {
+    email:"luke112233@gmail.com",
+    password:"luke112233"
+  }
+  this.createuser(newuser)
+  //this.notificationmodule(newuser);
+}
+
 
  //const [dataLoaded, setDataLoaded] = useState(false);
  render(){

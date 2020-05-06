@@ -6,7 +6,7 @@ admin.initializeApp(functions.config().firebasse);
 
 exports.sendPushNotification = functions.database.ref('users/{id}')
 .onCreate(event=>{
-    const root =event.data.ref.root
+    const root = event.data.ref.root
 
     var messages = []
 
