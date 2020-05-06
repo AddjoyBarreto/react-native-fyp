@@ -31,7 +31,8 @@
     "react-navigation-header-buttons": "^3.0.5",
     "react-navigation-stack": "^2.2.2",
     "rn-modal-picker": "^0.2.7",
-    "why-did-you-update": "^1.0.6"
+    "why-did-you-update": "^1.0.6",
+    "expo-permissions": "~8.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.0.0",

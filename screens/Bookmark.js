@@ -1,54 +1,68 @@
 import React, { Component } from 'react';
-import { StyleSheet, StatusBar, View,Text, Dimensions,Animated, Button,TouchableOpacity,ImageBackground,Keyboard, Alert,TouchableWithoutFeedback, ScrollView } from 'react-native'
-import { Ionicons } from '@expo/vector-icons';
-import { Table, Row, Rows } from 'react-native-table-component';
+import { StyleSheet, View,Text, Dimensions, ScrollView } from 'react-native'
 import GateStatus from '../components/GateStatus';
 
 const { width, height } = Dimensions.get('window');
 
 class Bookmark extends Component {
 
-        state = {
-          tableHead: ['Train', 'Time'],
-          tableData: [
-            ['Train', '8:45'],
-            ['Train', '9:45'],
-            ['Train', '10:50'],
-            ['Train', '12:30']
-          ],
-          toggleArrow: false,
-        }
-    
-    
-    
-      onArrowClick = () => {   
-         this.setState({ toggleArrow: !this.state.toggleArrow})
-      }
+    state = {
+      tableHead: ['Train', 'Time'],
+      tableData: [
+        ['Train', '8:45'],
+        ['Train', '9:45'],
+        ['Train', '10:50'],
+        ['Train', '12:30']
+      ],
+      toggleArrow: false,
+    }
+
+
+
+  onArrowClick = (id) => {
+    console.log(id);  
+      this.setState({ toggleArrow: !this.state.toggleArrow})
+  }
 
       
+        
     
 render(){
+        const mapsbyid = [{
+          id:1,
+          gatename:'Majorda',
+          
+        },
+        {
+          id:2,
+          gatename:'Utorda',
+          
+        },
+        {
+          id:3,
+          gatename:'Majorda',
+          
+        },
+        {
+          id:4,
+          gatename:'Utorda',
+          
+        },
+      ]
 
     return(
        
         <View style={styles.screen}>
           <ScrollView>
-              
-            <GateStatus onArrowClick={this.onArrowClick} 
-                        toggleArrow={this.state.toggleArrow} 
-                        state={this.state} />
 
-            <GateStatus onArrowClick={this.onArrowClick} 
-                        toggleArrow={this.state.toggleArrow} 
-                        state={this.state} />
-
-          <GateStatus onArrowClick={this.onArrowClick} 
-                      toggleArrow={this.state.toggleArrow} 
-                      state={this.state} />
-
-          <GateStatus onArrowClick={this.onArrowClick} 
-                      toggleArrow={this.state.toggleArrow} 
-                      state={this.state} />
+            { mapsbyid.map(mapobj=>{
+              //console.log(mapobj.id); 
+              return (<GateStatus onArrowClick={()=>this.onArrowClick(mapobj.id)} 
+                                  toggleArrow={this.state.toggleArrow} 
+                                  state={this.state}
+                                  mapobj={mapobj} />)
+            }) }
+                       
           </ScrollView>                         
         </View>
         
