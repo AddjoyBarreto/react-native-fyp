@@ -1,6 +1,7 @@
 import React, { useState, Component } from 'react';
 import { StyleSheet, Dimensions, Alert } from 'react-native';
 import TempScreen from './screens/tempScreen';
+import StartPage from './screens/StartPage';
 import * as Font from 'expo-font';
 import * as Permissions from 'expo-permissions';
 import { AppLoading, Notifications } from 'expo';
@@ -125,15 +126,15 @@ export default class App extends Component {
     console.log('token saved')
   }
 
-  componentDidMount() {
-    console.log("component did mount outer");
-    let newuser = {
-      email: "3asdasdsd33@gmail.com",
-      password: "luke112233"
-    }
-    this.createuser(newuser)
-    //this.notificationmodule(newuser);
-  }
+  // componentDidMount() {
+  //   console.log("component did mount outer");
+  //   let newuser = {
+  //     email: "luke123@gmail.com",
+  //     password: "luke123"
+  //   }
+  //   this.createuser(newuser)
+  //   //this.notificationmodule(newuser);
+  // }
 
 
   //const [dataLoaded, setDataLoaded] = useState(false);
@@ -150,10 +151,10 @@ export default class App extends Component {
     console.log("render")
     return (
       // <MapPage />
-      // <StartPage />
+      <StartPage />
       //  <Bookmark />
       // <NAVIGATOR />
-      <TempScreen />
+      // <TempScreen />
     );
   }
 }
