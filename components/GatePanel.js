@@ -5,12 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { Table, Row, Rows } from 'react-native-table-component';
 import { PanGestureHandler, State } from 'react-native-gesture-handler'
 
-import ExpoEnd from '../ExpoEnd'
+// import ExpoEnd from '../ExpoEnd'
 
 const { width, height } = Dimensions.get('window');
 const open = height - height * 0.6
 const close = open + height * 0.35
-ExpoEnd();
+
 
 class GatePanel extends Component {
 

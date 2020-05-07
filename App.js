@@ -1,15 +1,14 @@
 import React, { useState, Component } from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Alert } from 'react-native';
 import TempScreen from './screens/tempScreen';
 import * as Font from 'expo-font';
 import * as Permissions from 'expo-permissions';
 import { AppLoading, Notifications } from 'expo';
 
-import * as firebase from 'firebase';
 import NAVIGATOR from './navigation/navigator';
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
-require("firebase/firestore");
+import firebase from './firebase'
 
 YellowBox.ignoreWarnings(['Setting a timer']);
 const _console = _.clone(console);
@@ -18,34 +17,6 @@ console.warn = message => {
     _console.warn(message);
   }
 };
-
-// const firebaseConfig = {
-//   apiKey: "AIzaSyCNi4HBjKxbE93PcUOQfd62d_IulUGx2j4",
-//   authDomain: "railgo-23771.firebaseapp.com",
-//   databaseURL: "https://railgo-23771.firebaseio.com",
-//   projectId: "railgo-23771",
-//   storageBucket: "railgo-23771.appspot.com",
-//   messagingSenderId: "1085946388528",
-//   appId: "1:1085946388528:web:3571ed1f2f5c7a32404df5",
-//   measurementId: "G-L8412N9EST"
-// };
-
-//techproject firebase
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAA1VmnUpFiCg17kD3EvxVoEUmvepMajGM",
-  authDomain: "techproj-6cef0.firebaseapp.com",
-  databaseURL: "https://techproj-6cef0.firebaseio.com",
-  projectId: "techproj-6cef0",
-  storageBucket: "techproj-6cef0.appspot.com",
-  messagingSenderId: "587235964811",
-  appId: "1:587235964811:web:efb2ee24ff97ed7595618e"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-
-
 
 
 
@@ -62,11 +33,11 @@ firebase.initializeApp(firebaseConfig);
 
 
 export default class App extends Component {
-  state={
+  state = {
     dataLoaded: false,
   }
 
-    //google fonts
+  //google fonts
   fetchFonts = () => {
     return Font.loadAsync({
       'Roboto-Black': require('./assets/fonts/Roboto-Black.ttf'),
@@ -75,8 +46,8 @@ export default class App extends Component {
     });
   };
 
-  notificationmodule = async(newuser)=>{
-    await firebase.auth().signInWithEmailAndPassword(newuser.email, newuser.password).then(user=>{
+  notificationmodule = async (newuser) => {
+    await firebase.auth().signInWithEmailAndPassword(newuser.email, newuser.password).then(user => {
       console.log("noti");
       //console.log(user);
       this.registerForPushNotificationsAsync(user)
@@ -85,28 +56,29 @@ export default class App extends Component {
   }
 
   //create user
-  createuser = async(newuser) => {   
+  createuser = async (newuser) => {
     try {
       await firebase.auth().createUserWithEmailAndPassword(newuser.email, newuser.password)
       let userid = firebase.auth().currentUser.uid
 
       let db = firebase.firestore().collection("users").doc(userid)
       db.set({
-          email: newuser.email,
-          password: newuser.password,
+        email: newuser.email,
+        password: newuser.password,
       });
 
 
       firebase.database().ref('users').child(userid).set({
         email: newuser.email,
-        password: newuser.password})
+        password: newuser.password
+      })
 
       console.log("data Saved")
-      this.notificationmodule(newuser); 
-  }
-  catch(error){
-      alert("Error: ",error);
-  }
+      this.notificationmodule(newuser);
+    }
+    catch (error) {
+      Alert.alert("Error: ", error.message);
+    }
   }
 
   registerForPushNotificationsAsync = async (user) => {
@@ -116,61 +88,61 @@ export default class App extends Component {
     // only ask if permissions have not already been determined, because
     // iOS won't necessarily prompt the user a second time.
     if (existingStatus !== 'granted') {
-        // Android remote notification permissions are granted during the app
-        // install, so this will only ask on iOS
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        finalStatus = status;
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
     }
 
     // Stop here if the user did not grant permissions
     if (finalStatus !== 'granted') {
-        return;
+      return;
     }
 
     console.log('generating token')
     // Get the token that uniquely identifies this device
     let token = await Notifications.getExpoPushTokenAsync();
-    console.log('token',token);
+    console.log('token', token);
     // POST the token to our backend so we can use it to send pushes from there
     let userid = firebase.auth().currentUser.uid
-    console.log('userid',userid);
+    console.log('userid', userid);
     var updates = {}
     updates['/expoToken'] = token
     //real time db
-    await firebase.database().ref('users/'+ userid).update({ expoToken: token })
+    await firebase.database().ref('users/' + userid).update({ expoToken: token })
     //call the push notification 
     var db = firebase.firestore();
 
     //firestore
     db.collection("users").doc(userid).update({
-          expoToken: token,
-      }).then(function() {
-          console.log("Document successfully written!");
-      }).catch(function(error) {
-          console.error("Error writing document: ", error);
-      });
+      expoToken: token,
+    }).then(function () {
+      console.log("Document successfully written!");
+    }).catch(function (error) {
+      console.error("Error writing document: ", error);
+    });
 
     console.log('token saved')
-}
-
-componentDidMount(){
-  console.log("component did mount outer");
-  let newuser = {
-    email:"luke112233@gmail.com",
-    password:"luke112233"
   }
-  this.createuser(newuser)
-  //this.notificationmodule(newuser);
-}
+
+  componentDidMount() {
+    console.log("component did mount outer");
+    let newuser = {
+      email: "3asdasdsd33@gmail.com",
+      password: "luke112233"
+    }
+    this.createuser(newuser)
+    //this.notificationmodule(newuser);
+  }
 
 
- //const [dataLoaded, setDataLoaded] = useState(false);
- render(){
+  //const [dataLoaded, setDataLoaded] = useState(false);
+  render() {
     if (!this.state.dataLoaded) {
       return (
         <AppLoading
           startAsync={this.fetchFonts}
-          onFinish={() => this.setState({dataLoaded:true})}
+          onFinish={() => this.setState({ dataLoaded: true })}
           onError={(err) => console.log(err)}
         />
       );
