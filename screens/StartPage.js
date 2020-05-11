@@ -17,7 +17,7 @@ const StartPage = (props) => {
     const [message, showMessage] = useState((!firebaseConfig || Platform.OS === 'web')
         ? { text: "To get started, provide a valid firebase config in App.js and open this snack on an iOS or Android device."}
         : undefined);
-
+ 
     loginHandler = async () => {
             // The FirebaseRecaptchaVerifierModal ref implements the
             // FirebaseAuthApplicationVerifier interface and can be
@@ -51,12 +51,22 @@ const StartPage = (props) => {
                 PhoneNumber: phoneNumber
               })
               //navigation
-            //props.navigation.navigate('MapPage');
+            props.navigation.navigate('MapPage');
         } catch (err) {
             alert(err);
         }
     }
 
+    navi = (navigate) =>{
+        try{
+           navigate('MapPage')
+        }catch(err)
+        {
+            alert(err)
+        }
+    }
+
+    console.log(props)
         return (
             
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -90,12 +100,15 @@ const StartPage = (props) => {
                                 onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
                         />
                         <View style={styles.buttonContainer}>
-                        <TouchableOpacity activeOpacity = { .5 } style={{ borderRadius:10}}>
+                        <TouchableOpacity activeOpacity = { .5 } style={{ borderRadius:10,width:width*0.25}}>
                             <Button title='login' disabled={!phoneNumber} type='outline' buttonStyle={{backgroundColor:'#F5F1EC'}} onPress={()=>loginHandler()}/>
                             {/* <View style={styles.btns}
                                 disabled={!phoneNumber} onPress={()=>loginHandler()}>
                                 <Text style={{fontSize:width*0.045}}>Login</Text>
                             </View> */}
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity = { .5 } style={{ borderRadius:10}}>
+                            <Button title="nav" onPress={()=>props.navigation.navigate('MapPage')}  buttonStyle={{backgroundColor:'#F5F1EC'}} />
                         </TouchableOpacity>
                         </View> 
                         </React.Fragment>): undefined}
@@ -119,6 +132,7 @@ const StartPage = (props) => {
                                 <Text style={{fontSize:width*0.045}}>Confirm Verification Code</Text>
                             </View> */}
                         </TouchableOpacity>
+                        
                     {/* <Button
                         title="Confirm Verification Code"
                         disabled={!verificationId}

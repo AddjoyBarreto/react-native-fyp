@@ -151,9 +151,9 @@ export default class App extends Component {
     console.log("render")
     return (
       // <MapPage />
-      <StartPage />
+      // <StartPage />
       //  <Bookmark />
-      // <NAVIGATOR />
+      <NAVIGATOR />
       // <TempScreen />
     );
   }

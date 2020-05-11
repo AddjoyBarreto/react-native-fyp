@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, StatusBar, View,Text, Dimensions, TextInput, Button,TouchableOpacity,ImageBackground,Keyboard, Alert,TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, View,Text, Dimensions, Button} from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
 const tempScreen = (props) => {
+    console.log(props)
     return(
         <View style={styles.screen}>
             <Text>the tempScreen page</Text>
