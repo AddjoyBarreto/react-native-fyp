@@ -6,21 +6,19 @@ import { Table, Row, Rows } from 'react-native-table-component';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import * as Permissions from 'expo-permissions';
-import { AppLoading, Notifications } from 'expo';
+import { Notifications } from 'expo';
 // import ExpoEnd from '../ExpoEnd'
 
 const { width, height } = Dimensions.get('window');
 const open = height - height * 0.6
 const close = open + height * 0.35
-
+var array = [];
 
 class GatePanel extends Component {
 
-  //const [outputText, setOutpotText] = useState(false)
-  //toggleDisplayBio = ()=> setOutpotText(!outputText);
   constructor(props) {
     super(props);
-
+    console.log('props ',this.props.selected)
     this.state = {
       tableHead: ['Train', 'Time'],
       tableData: [
@@ -31,6 +29,7 @@ class GatePanel extends Component {
       ],
       slideAnim: new Animated.Value(close),
       expand: false,
+      Gatearray:['']
     }
 
     this.slideVal = this.state.slideAnim.interpolate({
@@ -135,6 +134,28 @@ class GatePanel extends Component {
       console.log('token saved')
     }
   
+    this.bookmarkHandler = async() =>{
+      try{
+        
+        let userid = firebase.auth().currentUser.uid
+        let selectedGate = this.props.selected.title; //selected gate
+        await firebase.database().ref('users/' + userid+'/bookmark').once('value', function(snapshot) {
+          array = snapshot.val();
+          // ["Bill Gates", "Larry Page", "James Tamplin"]
+        });
+        //let joined = this.state.Gatearray.concat(selectedGate);
+        //this.setState({Gatearray: joined})
+        this.setState({Gatearray: {...array,...selectedGate}})
+        //array.push( this.props.selected.title )
+        console.log('array',array);
+        console.log('Gatearray',this.state.Gatearray);
+        await firebase.database().ref('users/' + userid+'/bookmark').update({bookmark: this.props.selected.title})
+        alert('Bookmark Added')
+      }
+      catch(err){
+        alert(err);
+      }
+    }
 
   }
 
@@ -209,7 +230,7 @@ class GatePanel extends Component {
                 </Table>
               </View>
               <View style={styles.footerbuttonsContainer}>
-                <Button title='Bookmark'></Button>
+                <Button title='Bookmark' onPress={()=>this.bookmarkHandler()}></Button>
                 <Button title='Remind Me' onPress={()=>this.registerForPushNotificationsAsync()}></Button>
               </View>
             </View>

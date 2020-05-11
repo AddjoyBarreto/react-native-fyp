@@ -68,7 +68,7 @@ const MapPage = (props) => {
           markers={markers}
           selected={selected}
           mapClick={mapClick} />
-        <GatePanel selected={selected} />
+        <GatePanel selected={selected} itemSelect={itemSelect} />
       </View>
     );
   }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, StatusBar, View,Text, Dimensions,Animated, Button,TouchableOpacity,ImageBackground,Keyboard, Alert,TouchableWithoutFeedback, ScrollView } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { Table, Row, Rows } from 'react-native-table-component';
+import GatePanel from './GatePanel';
 
 const { width, height } = Dimensions.get('window');
 
@@ -12,7 +13,6 @@ const GateStatus = (props) => {
                                               <Rows data={props.state.tableData} style={styles.tdatastyle} textStyle={styles.tdatatext} />
                                           </Table>
                                         </View>) : null;
-
 
     return(
        
@@ -42,7 +42,6 @@ const GateStatus = (props) => {
                 </View>
             </View> 
 
-            
         
     )
 }

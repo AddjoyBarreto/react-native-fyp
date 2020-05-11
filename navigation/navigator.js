@@ -28,9 +28,6 @@ const MySwitchNavigator = createSwitchNavigator({
     MapPage: {
         screen: MapPage
     },
-    Temp: {
-        screen: tempScreen
-    },
     Bookmark: {
         screen: sideDrawer
     },
