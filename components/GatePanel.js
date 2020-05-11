@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import { Table, Row, Rows } from 'react-native-table-component';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
-import * as firebase from 'firebase';
+import firebase from '../firebase'
 import * as Permissions from 'expo-permissions';
 import { Notifications } from 'expo';
 // import ExpoEnd from '../ExpoEnd'
@@ -18,7 +18,7 @@ class GatePanel extends Component {
 
   constructor(props) {
     super(props);
-    console.log('props ',this.props.selected)
+    console.log('props ', this.props.selected)
     this.state = {
       tableHead: ['Train', 'Time'],
       tableData: [
@@ -29,7 +29,9 @@ class GatePanel extends Component {
       ],
       slideAnim: new Animated.Value(close),
       expand: false,
-      Gatearray:['']
+      Gatearray: [''],
+      bookmarkedGates: [],
+      buttonLoading: false
     }
 
     this.slideVal = this.state.slideAnim.interpolate({
@@ -93,7 +95,7 @@ class GatePanel extends Component {
     this.registerForPushNotificationsAsync = async () => {
       const { existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
       let finalStatus = existingStatus;
-  
+
       // only ask if permissions have not already been determined, because
       // iOS won't necessarily prompt the user a second time.
       if (existingStatus !== 'granted') {
@@ -102,12 +104,12 @@ class GatePanel extends Component {
         const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
         finalStatus = status;
       }
-  
+
       // Stop here if the user did not grant permissions
       if (finalStatus !== 'granted') {
         return;
       }
-  
+
       console.log('generating token')
       // Get the token that uniquely identifies this device
       let token = await Notifications.getExpoPushTokenAsync();
@@ -121,7 +123,7 @@ class GatePanel extends Component {
       await firebase.database().ref('users/' + userid).update({ expoToken: token })
       //call the push notification 
       // var db = firebase.firestore();
-  
+
       //firestore
       // db.collection("users").doc(userid).update({
       //   expoToken: token,
@@ -133,30 +135,43 @@ class GatePanel extends Component {
       alert('reminder is set');
       console.log('token saved')
     }
-  
-    this.bookmarkHandler = async() =>{
-      try{
-        
+
+    this.bookmarkHandler = async () => {
+      try {
+        this.setState({ buttonLoading: true })
         let userid = firebase.auth().currentUser.uid
         let selectedGate = this.props.selected.title; //selected gate
-        await firebase.database().ref('users/' + userid+'/bookmark').once('value', function(snapshot) {
-          array = snapshot.val();
-          // ["Bill Gates", "Larry Page", "James Tamplin"]
-        });
-        //let joined = this.state.Gatearray.concat(selectedGate);
-        //this.setState({Gatearray: joined})
-        this.setState({Gatearray: {...array,...selectedGate}})
-        //array.push( this.props.selected.title )
-        console.log('array',array);
-        console.log('Gatearray',this.state.Gatearray);
-        await firebase.database().ref('users/' + userid+'/bookmark').update({bookmark: this.props.selected.title})
-        alert('Bookmark Added')
+        // await firebase.database().ref('users/' + userid+'/bookmark').once('value', function(snapshot) {
+        //   array = snapshot.val();
+        //   // ["Bill Gates", "Larry Page", "James Tamplin"]
+        // });
+        // //let joined = this.state.Gatearray.concat(selectedGate);
+        // //this.setState({Gatearray: joined})
+        // this.setState({Gatearray: {...array,...selectedGate}})
+        // //array.push( this.props.selected.title )
+        // console.log('array',array);
+        // console.log('Gatearray',this.state.Gatearray);
+        if (this.state.bookmarkedGates.includes(this.props.selected.title)) {
+          const bookmarkRef = firebase.database().ref('users/' + userid + '/bookmark')
+          bookmarkRef.orderByValue().equalTo(this.props.selected.title).once('value', (snapshot => {
+            if (snapshot.val() !== null) {
+              Object.keys(snapshot.val()).forEach(key => {
+                bookmarkRef.child(key).set(null).then(this.setState({ buttonLoading: false }))
+              })
+            }
+          }))
+        }
+        else {
+          await firebase.database().ref('users/' + userid + '/bookmark').push(this.props.selected.title)
+          alert('Bookmark Added')
+          this.setState({ buttonLoading: false })
+        }
       }
-      catch(err){
+      catch (err) {
         alert(err);
+        this.setState({ buttonLoading: false })
       }
     }
-
   }
 
   componentDidUpdate(prevprops) {
@@ -177,7 +192,21 @@ class GatePanel extends Component {
 
   }
 
-  
+
+  componentDidMount() {
+    const userRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + "/bookmark")
+    userRef.on("value", (snapshot) => {
+      console.log('database bookmarks', snapshot.val())
+      if (snapshot.val() !== null) {
+        this.setState({ bookmarkedGates: Object.values(snapshot.val()) })
+      }
+      else {
+        this.setState({ bookmarkedGates: [] })
+      }
+    })
+  }
+
+
   render() {
 
     if (this.props.selected) {
@@ -230,8 +259,9 @@ class GatePanel extends Component {
                 </Table>
               </View>
               <View style={styles.footerbuttonsContainer}>
-                <Button title='Bookmark' onPress={()=>this.bookmarkHandler()}></Button>
-                <Button title='Remind Me' onPress={()=>this.registerForPushNotificationsAsync()}></Button>
+                <Button loading={this.state.buttonLoading} disabled={this.state.buttonLoading} title={this.state.bookmarkedGates.includes(this.props.selected.title) ? 'UnBookmark' : "Bookmark"}
+                  onPress={() => this.bookmarkHandler()}></Button>
+                <Button title='Remind Me' onPress={() => this.registerForPushNotificationsAsync()}></Button>
               </View>
             </View>
 
