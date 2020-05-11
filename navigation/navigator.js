@@ -38,5 +38,5 @@ const MySwitchNavigator = createSwitchNavigator({
 });
 
 
-export default createAppContainer(MySwitchNavigator);
+export default createAppContainer(sideDrawer);
 

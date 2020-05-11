@@ -4,8 +4,8 @@ let fetch = require('node-fetch')
 const admin = require('firebase-admin')
 admin.initializeApp(functions.config().firebasse);
 
-exports.sendPushNotification = functions.database.ref('users/{id}')
-.onCreate(event=>{
+exports.sendPushNotification = functions.database.ref('stations/{id}')
+.onUpdate(event=>{
     const root = event.data.ref.root
 
     var messages = []

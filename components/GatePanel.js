@@ -3,8 +3,10 @@ import { StyleSheet, Text, View, Dimensions, Animated, TouchableOpacity, Interac
 import { Button } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import { Table, Row, Rows } from 'react-native-table-component';
-import { PanGestureHandler, State } from 'react-native-gesture-handler'
-
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import * as firebase from 'firebase';
+import * as Permissions from 'expo-permissions';
+import { AppLoading, Notifications } from 'expo';
 // import ExpoEnd from '../ExpoEnd'
 
 const { width, height } = Dimensions.get('window');
@@ -89,9 +91,52 @@ class GatePanel extends Component {
       }
     }
 
+    this.registerForPushNotificationsAsync = async () => {
+      const { existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+  
+      // only ask if permissions have not already been determined, because
+      // iOS won't necessarily prompt the user a second time.
+      if (existingStatus !== 'granted') {
+        // Android remote notification permissions are granted during the app
+        // install, so this will only ask on iOS
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+  
+      // Stop here if the user did not grant permissions
+      if (finalStatus !== 'granted') {
+        return;
+      }
+  
+      console.log('generating token')
+      // Get the token that uniquely identifies this device
+      let token = await Notifications.getExpoPushTokenAsync();
+      console.log('token', token);
+      // POST the token to our backend so we can use it to send pushes from there
+      let userid = firebase.auth().currentUser.uid
+      console.log('userid', userid);
+      var updates = {}
+      updates['/expoToken'] = token
+      //real time db
+      await firebase.database().ref('users/' + userid).update({ expoToken: token })
+      //call the push notification 
+      // var db = firebase.firestore();
+  
+      //firestore
+      // db.collection("users").doc(userid).update({
+      //   expoToken: token,
+      // }).then(function () {
+      //   console.log("Document successfully written!");
+      // }).catch(function (error) {
+      //   console.error("Error writing document: ", error);
+      // });
+      alert('reminder is set');
+      console.log('token saved')
+    }
+  
 
   }
-
 
   componentDidUpdate(prevprops) {
     if (!this.props.selected && this.state.expand) {
@@ -111,9 +156,8 @@ class GatePanel extends Component {
 
   }
 
-
+  
   render() {
-
 
     if (this.props.selected) {
       return (
@@ -166,7 +210,7 @@ class GatePanel extends Component {
               </View>
               <View style={styles.footerbuttonsContainer}>
                 <Button title='Bookmark'></Button>
-                <Button title='Remind Me'></Button>
+                <Button title='Remind Me' onPress={()=>this.registerForPushNotificationsAsync()}></Button>
               </View>
             </View>
 

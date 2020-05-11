@@ -57,16 +57,6 @@ const StartPage = (props) => {
         }
     }
 
-    navi = (navigate) =>{
-        try{
-           navigate('MapPage')
-        }catch(err)
-        {
-            alert(err)
-        }
-    }
-
-    console.log(props)
         return (
             
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -106,9 +96,6 @@ const StartPage = (props) => {
                                 disabled={!phoneNumber} onPress={()=>loginHandler()}>
                                 <Text style={{fontSize:width*0.045}}>Login</Text>
                             </View> */}
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity = { .5 } style={{ borderRadius:10}}>
-                            <Button title="nav" onPress={()=>props.navigation.navigate('MapPage')}  buttonStyle={{backgroundColor:'#F5F1EC'}} />
                         </TouchableOpacity>
                         </View> 
                         </React.Fragment>): undefined}
