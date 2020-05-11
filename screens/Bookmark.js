@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View,Text, Dimensions, ScrollView } from 'react-native'
+import { StyleSheet, View,Text, Dimensions, ScrollView,TouchableOpacity } from 'react-native';
+import { EvilIcons } from '@expo/vector-icons';
 import GateStatus from '../components/GateStatus';
-
+import { DrawerActions } from 'react-navigation-drawer';
+import * as firebase from 'firebase';
 const { width, height } = Dimensions.get('window');
 
+const arr = []
 class Bookmark extends Component {
 
     state = {
@@ -15,16 +18,30 @@ class Bookmark extends Component {
         ['Train', '12:30']
       ],
       toggleArrow: false,
+      array:[]
     }
 
-
+constructor(props){
+  super(props)
+  let userid = firebase.auth().currentUser.uid
+  try{
+    firebase.database().ref('users/' + userid+'/bookmark').once('value', function(snapshot) {
+      console.log('bookmarked in DB',Object.values(snapshot.val()));
+      //arr = Object.values(snapshot.val())
+      this.setState({array: Object.values(snapshot.val())})
+      console.log(this.state.array)
+    });
+  }
+  catch(err){
+    console.log(err)
+  }
+}
 
   onArrowClick = (id) => {
     console.log(id);  
       this.setState({ toggleArrow: !this.state.toggleArrow})
   }
 
-      
         
     
 render(){
@@ -38,29 +55,26 @@ render(){
           gatename:'Utorda',
           
         },
-        {
-          id:3,
-          gatename:'Majorda',
-          
-        },
-        {
-          id:4,
-          gatename:'Utorda',
-          
-        },
       ]
 
     return(
        
         <View style={styles.screen}>
+        <TouchableOpacity style={{marginTop:20,width:width}} onPress={() => {
+            this.props.navigation.dispatch(DrawerActions.toggleDrawer());
+          }}>
+            <EvilIcons name="navicon" size={40} color="black" />
+          </TouchableOpacity>
           <ScrollView>
 
-            { mapsbyid.map(mapobj=>{
+            { this.state.array.map(mapobj=>{
               //console.log(mapobj.id); 
-              return (<GateStatus onArrowClick={()=>this.onArrowClick(mapobj.id)} 
+              return (<React.Fragment key={mapobj.id}>
+                <GateStatus onArrowClick={()=>this.onArrowClick(mapobj.id)} 
                                   toggleArrow={this.state.toggleArrow} 
                                   state={this.state}
-                                  mapobj={mapobj} />)
+                                  mapobj={mapobj} />
+                </React.Fragment>)
             }) }
                        
           </ScrollView>                         

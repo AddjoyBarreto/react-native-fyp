@@ -18,7 +18,7 @@ const GateStatus = (props) => {
        
             <View style={styles.gatecontainers}>
                 <View style={styles.gatetopsection}>
-                    <Text style={styles.gatename}>{props.mapobj.gatename}{props.mapobj.id}</Text>
+                    <Text style={styles.gatename}>{props.mapobj.gatename}</Text>
                     <View style={styles.topcontainersview}>
                         <Text style={styles.topcontainerstext}>Next Arrival: </Text>
                         <Text style={styles.topcontainerstext}>10:20 min</Text>
