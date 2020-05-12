@@ -5,6 +5,20 @@ import StartPage from '../screens/StartPage';
 import MapPage from '../screens/mappage';
 import Bookmark from '../screens/Bookmark';
 import tempScreen from '../screens/tempScreen';
+import firebase from '../firebase'
+
+const LoadingPage = (props) => {
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            props.navigation.navigate('Main')
+        }
+        else {
+            props.navigation.navigate('Startpage')
+        }
+    })
+
+    return null
+}
 
 
 const sideDrawer = createDrawerNavigator({
@@ -22,18 +36,14 @@ const sideDrawer = createDrawerNavigator({
 
 
 const MySwitchNavigator = createSwitchNavigator({
+    LoadingPage: LoadingPage,
     Startpage: {
         screen: StartPage
     },
-    MapPage: {
-        screen: MapPage
-    },
-    Bookmark: {
-        screen: sideDrawer
-    },
-    
+    Main: sideDrawer
+
 });
 
 
-export default createAppContainer(sideDrawer);
+export default createAppContainer(MySwitchNavigator);
 
